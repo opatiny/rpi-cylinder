@@ -6,7 +6,7 @@ var Five = require('johnny-five');
 const {
     Board
 } = require('../preferences');
-
+console.log(Board);
 
 var board = new Five.Board({
     io: new Board()
