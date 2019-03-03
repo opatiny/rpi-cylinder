@@ -1,5 +1,5 @@
 var five = require('johnny-five');
-var chipio = require('../preferences').ChipIO;
+var Board = require('../preferences').Board;
 
 
 var defaultCallback = function () {
@@ -18,7 +18,7 @@ var defaultCallback = function () {
 
 module.exports = function accelerometer(callback = defaultCallback) {
     var board = new five.Board({
-        io: new chipio()
+        io: new Board()
     });
 
     board.on('ready', function () {

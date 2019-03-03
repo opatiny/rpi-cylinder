@@ -1,6 +1,6 @@
 const debug = require('debug')('wc:index'); // wc for web control
 const Five = require('johnny-five');
-const ChipIO = require('../preferences.js').ChipIO;
+const Board = require('../preferences.js').Board;
 
 
 debug('Packages required');
@@ -12,7 +12,7 @@ const remotePrefs = require('./ws');
 debug('prefs required');
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 debug('board created');
 

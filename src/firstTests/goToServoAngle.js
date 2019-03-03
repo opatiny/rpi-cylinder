@@ -2,11 +2,11 @@
 // control of one servo, the code brings it to a given angle (degrees), the angle you give is directly transmitted to the servo
 
 var five = require('johnny-five');
-var chipio = require('chip-io');
+var Board = require('raspi-io');
 
 
 var board = new five.Board({
-    io: new chipio()
+    io: new Board()
 });
 
 board.on('ready', function () {

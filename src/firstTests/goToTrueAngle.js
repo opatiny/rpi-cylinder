@@ -4,8 +4,10 @@
 const debug = require('debug')('ft:trueAngle');
 
 var Five = require('johnny-five');
-var ChipIO = require('../preferences.js').ChipIO;
-const cylinderPrototype = require('../preferences').cylinderPrototype;
+const {
+    cylinderPrototype,
+    Board
+} = require('../preferences');
 
 // Initialize the servo instance
 const {servo1, servo2, servo3} = require('../servoPins.js');
@@ -13,7 +15,7 @@ const {servo1, servo2, servo3} = require('../servoPins.js');
 debug('Packages required');
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 
 board.on('ready', function () {

@@ -1,11 +1,11 @@
-// program that allows move the mass on any circle using CHIP
+// program that allows move the mass on any circle using RPi
 
 var five = require('johnny-five');
-var chipio = require('chip-io');
+var Board = require('raspi-io');
 var delay = require('delay');
 
 var board = new five.Board({
-    io: new chipio()
+    io: new Board()
 });
 
 board.on('ready', async function () {

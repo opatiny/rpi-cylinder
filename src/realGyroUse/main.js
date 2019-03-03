@@ -5,11 +5,11 @@
 const debug = require('debug')('ru:main'); // ru for real use
 
 var Five = require('johnny-five');
-var ChipIO = require('../preferences.js').ChipIO;
+var Board = require('../preferences.js').Board;
 debug('Packages required');
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 debug('board created');
 

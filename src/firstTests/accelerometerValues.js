@@ -3,13 +3,13 @@
 
 var Five = require('johnny-five');
 
-var {
-    ChipIO
+const {
+    Board
 } = require('../preferences');
 
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 
 board.on('ready', function () {

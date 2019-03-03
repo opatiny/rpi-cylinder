@@ -1,16 +1,16 @@
-// program that allows to make a servo sweep back and forth using CHIP
+// program that allows to make a servo sweep back and forth using RPi
 
 var Five = require('johnny-five');
 
-var {
-    ChipIO
+const {
+    Board
 } = require('../preferences');
 
 var delay = require('delay');
 
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 
 board.on('ready', async function () {

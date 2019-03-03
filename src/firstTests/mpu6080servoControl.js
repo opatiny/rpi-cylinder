@@ -1,10 +1,10 @@
 //http://johnny-five.io/examples/imu-mpu6050/
 
 var five = require('johnny-five');
-var chipio = require('chip-io');
+var Board = require('raspi-io');
 
 var board = new five.Board({
-    io: new chipio()
+    io: new Board()
 });
 
 board.on('ready', function () {

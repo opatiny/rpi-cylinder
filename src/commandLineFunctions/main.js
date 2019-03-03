@@ -9,16 +9,16 @@
 
 var debug = require('debug')('cl:main');
 var Five = require('johnny-five');
-var ChipIO = require('../preferences.js').ChipIO;
-debug('chipio required');
+var Board = require('../preferences.js').Board;
+debug('rpi required');
 
 var delay = require('delay');
 
 var board = new Five.Board({
-    io: new ChipIO()
+    io: new Board()
 });
 
-debug('new chipio');
+debug('new board');
 
 var goToPoint = require('./goToPoint.js');
 var movingOnCircle = require('./movingOnCircle.js');
