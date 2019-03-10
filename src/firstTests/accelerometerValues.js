@@ -3,33 +3,29 @@
 
 var Five = require('johnny-five');
 
-const {
-    Board
-} = require('../preferences');
+const { Board } = require('../preferences');
 console.log(Board);
 
 var board = new Five.Board({
-    io: new Board()
+  io: new Board()
 });
 
-board.on('ready', function () {
+board.on('ready', function() {
+  var accelerometer = new Five.Accelerometer({
+    controller: 'MPU6050',
+    sensitivity: 16384 // optional
+  });
 
-    var accelerometer = new Five.Accelerometer({
-        controller: 'MPU6050',
-        sensitivity: 16384 // optional
-    });
-
-    accelerometer.on('change', function () {
-        var result = {
-            x: this.x,
-            y: this.y,
-            z: this.z,
-            pitch: this.pitch,
-            roll: this.roll,
-            acceleration: this.acceleration,
-            inclination: this.inclination,
-            orientation: this.orientation
-        };
-        console.log(result);
-    });
+  accelerometer.on('change', function() {
+    var result = {
+      x: this.x,
+      y: this.y,
+      z: this.z,
+      pitch: this.pitch,
+      roll: this.roll,
+      acceleration: this.acceleration,
+      inclination: this.inclination,
+      orientation: this.orientation
+    };
+  });
 });

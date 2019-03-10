@@ -2,10 +2,10 @@
 
 var cylinderPrototype = 3;
 
-let rpi=require('raspi-io');
+let RaspiIO = require('raspi-io').RaspiIO;
 
 module.exports = {
-    Board:require('raspi-io'),
-    servoPins:[0, 1, 2],
-    cylinderPrototype: require('./prefs/cylinderPrototype' + cylinderPrototype)
+  Board: RaspiIO,
+  servoPins: [0, 1, 2],
+  cylinderPrototype: require('./prefs/cylinderPrototype' + cylinderPrototype)
 };
