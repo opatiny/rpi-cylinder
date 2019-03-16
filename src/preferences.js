@@ -1,6 +1,6 @@
 'use strict';
 
-var cylinderPrototype = 3;
+var cylinderPrototype = "3-rpi";
 
 let RaspiIO = require('raspi-io').RaspiIO;
 

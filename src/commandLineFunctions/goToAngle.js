@@ -1,8 +1,11 @@
-
 // code allowing the mass to move to a certain angle, the radius of the circle of the mass being a parameter
 const debug = require('debug')('cl:angle');
 const delay = require('delay');
-const {servo1, servo2, servo3} = require('../servoPins.js');
+const {
+    servo1,
+    servo2,
+    servo3
+} = require('../servoPins.js');
 
 const cylinderPrototype = require('../preferences').cylinderPrototype;
 

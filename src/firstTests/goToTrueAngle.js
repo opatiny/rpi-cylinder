@@ -10,12 +10,18 @@ const {
 } = require('../preferences');
 
 // Initialize the servo instance
-const {servo1, servo2, servo3} = require('../servoPins.js');
+const {
+    servo1,
+    servo2,
+    servo3
+} = require('../servoPins.js');
 
 debug('Packages required');
 
+let rpi = new Board();
+
 var board = new Five.Board({
-    io: new Board()
+    io: rpi
 });
 
 board.on('ready', function () {
@@ -71,4 +77,3 @@ function grab(flag) {
     let index = process.argv.indexOf(flag);
     return (index === -1) ? null : process.argv[index + 1];
 }
-

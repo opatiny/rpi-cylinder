@@ -25,7 +25,7 @@ const stable = require('./features/stable');
 const stablePid = require('./features/stable-pid');
 debug('toAlpha, toPrototypeInclination, control functions required');
 
-board.on('ready', async function() {
+board.on('ready', async function () {
   var accelerometer = new Five.Accelerometer({
     controller: 'MPU6050',
     sensitivity: 1024 // optional
@@ -42,7 +42,7 @@ board.on('ready', async function() {
   };
   var angleCenterLog = [0];
 
-  accelerometer.on('change', async function() {
+  accelerometer.on('change', async function () {
     // let newCounter = counter++;
     // debug('Number of changes detected: ' + newCounter);
 

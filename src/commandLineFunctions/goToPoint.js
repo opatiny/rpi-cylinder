@@ -1,9 +1,12 @@
-
 // code that moves the mass to an x,y position
 const debug = require('debug')('cl:point');
 
 const delay = require('delay');
-const {servo1, servo2, servo3} = require('../servoPins.js');
+const {
+    servo1,
+    servo2,
+    servo3
+} = require('../servoPins.js');
 
 const cylinderPrototype = require('../preferences').cylinderPrototype;
 
@@ -42,7 +45,7 @@ async function goToPoint(xMassPosition, yMassPosition) {
     var angle3 = setServoAngle(180 - formula(xMassPosition3, yMassPosition3, bigRadius, radiusServo, distance), infoServo3);
 
 
-    debug(xMassPosition, yMassPosition, angle1, angle2, angle3);
+    debug('x,y,1,2,3', xMassPosition, yMassPosition, angle1, angle2, angle3);
 
     servo1.to(angle1);
     servo2.to(angle2);

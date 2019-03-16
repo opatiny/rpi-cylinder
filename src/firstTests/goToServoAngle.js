@@ -1,40 +1,26 @@
 // http://johnny-five.io/examples/servo-PCA9685/
 // control of one servo, the code brings it to a given angle (degrees), the angle you give is directly transmitted to the servo
 
-var five = require('johnny-five');
-var Board = require('raspi-io');
+const five = require('johnny-five');
+const delay = require('delay');
+const {
+    Board
+} = require('../preferences');
 
 
 var board = new five.Board({
     io: new Board()
 });
 
-board.on('ready', function () {
+// Initialize the servo instance
+const {
+    servo1,
+    servo2,
+    servo3
+} = require('../servoPins.js');
+
+board.on('ready', async function () {
     console.log('Connected');
-
-    // Initialize the servo instance
-    var servo1 = new five.Servo({
-        address: 0x40,
-        controller: 'PCA9685',
-        pin: 15
-    });
-
-    var servo2 = new five.Servo({
-        address: 0x40,
-        controller: 'PCA9685',
-        pin: 14
-    });
-
-    var servo3 = new five.Servo({
-        address: 0x40,
-        controller: 'PCA9685',
-        pin: 13
-    });
-
-    servo2.tuning = {
-
-
-    };
 
 
     const servoAngle = grab('--a'); // general angle of all the servos in degree or
@@ -45,6 +31,9 @@ board.on('ready', function () {
     if (!servoAngle && !servoAngle1 && !servoAngle2 && !servoAngle3) {
         console.log('No data to execute.');
     }
+
+    servo3.to(90);
+    await delay(1000);
 
 
     if (servoAngle) {
@@ -74,4 +63,3 @@ function grab(flag) {
     let index = process.argv.indexOf(flag);
     return (index === -1) ? null : process.argv[index + 1];
 }
-
