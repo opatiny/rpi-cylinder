@@ -20,7 +20,7 @@ The goal was to make the user interface as easy as possible, so that even a chil
 
 ## Technologies used
 
-To run the the scripts on the Raspberry Pi, `Node.js` has been used. Then, to make the debug easier, we passed arguments from the command line to the code. This system has been used during all the development phase. The final control of the cylinder is done through a web page. Since we needed a dynamic web page, we used `WebSockets`, which basically allows to keep an `HTTP` connection open. Finally, `pm2` allows to run scripts at boot. In the final code, the main program that is run using `pm2` is `src/webControl/index.js`.
+To run the the scripts on the Raspberry Pi, `Node.js` has been used. Then, to make the debug easier, we passed arguments from the command line to the code. This system has been used during all the development phase. The final control of the cylinder is done through a web page. Since we needed a dynamic web page, we used `WebSockets`, which basically allows to keep an `HTTP` connection open. Finally, `pm2` allows to run scripts at boot. In the final code, the main program that is run using `pm2` is [`src/webControl/index.js`](https://github.com/opatiny/rpi-cylinder/blob/master/src/webControl/index.js).
 
 
 
