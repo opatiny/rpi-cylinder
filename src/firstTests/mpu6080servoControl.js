@@ -1,7 +1,9 @@
 //http://johnny-five.io/examples/imu-mpu6050/
 
 var five = require('johnny-five');
-var Board = require('raspi-io');
+const {
+    Board
+} = require('../preferences');
 
 var board = new five.Board({
     io: new Board()

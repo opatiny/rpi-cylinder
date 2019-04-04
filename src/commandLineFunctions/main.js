@@ -1,4 +1,3 @@
-
 /* This document will require all the different functions that we developed, like making to rotations,
  going to a specific point, moving three meters forward or backwards,... It uses command line arguments
  (https://www.youtube.com/watch?v=yTJ9OJmbiHU).
@@ -62,6 +61,7 @@ board.on('ready', async function () {
         console.log('You are in movingOnCircle');
         await movingOnCircle(radiusCenter, numberRotation);
     }
+
     if (xMassPosition && yMassPosition) {
         console.log('You are in goToPoint');
         await goToPoint(xMassPosition, yMassPosition);
@@ -85,4 +85,3 @@ board.on('ready', async function () {
     process.exit(0);
 
 });
-
