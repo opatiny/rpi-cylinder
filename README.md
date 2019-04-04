@@ -5,7 +5,7 @@
 
 __Note:__ To obtain general information about the project, click [here](https://opatiny.github.io/rc2/).
 
-**Abstract:**
+## Abstract
 This repository contains the final code that allows the control of a robotic cylinder that rolls when its center of mass is displaced. To induce the movement, a mass is moved inside the cylinder using three high torque servo motors displaced on an equilateral triangle around the cylinder. The code is designed to work on a Raspberry Pi Nano W, but it was initially conceived to work on a C.H.I.P. Pro (click [here](https://github.com/opatiny/chip) to see the original code).
 
 Also, note that this is a beginner's project, which implies that a lot of things are not coded optimally.
