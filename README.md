@@ -20,7 +20,7 @@ The goal was to make the user interface as easy as possible, so that even a chil
 
 ## Technologies used
 
-To run the the scripts on the Raspberry Pi, `Node.js` has been used. Then, to make the debug easier, we passed arguments from the command line to the code. This system has been used during all the development phase. The final control of the cylinder is done through a web page. Since we needed a dynamic web page, we used `WebSockets`, which basically allows to keep an `HTTP` connection open. Finally, `pm2` allows to run scripts at boot.
+To run the the scripts on the Raspberry Pi, `Node.js` has been used. Then, to make the debug easier, we passed arguments from the command line to the code. This system has been used during all the development phase. The final control of the cylinder is done through a web page. Since we needed a dynamic web page, we used `WebSockets`, which basically allows to keep an `HTTP` connection open. Finally, `pm2` allows to run scripts at boot. In the final code, the main program that is run using `pm2` is `src/webControl/index.js`.
 
 ## Install on a Raspberry Pi Nano W
 First of all, you need to format your Raspberry Pi and let it act as a WiFi rooter. To achieve that, you can follow this procedure. It will also guide you in the install of `Node.js`.
