@@ -5,19 +5,71 @@
         <title>Cylinder Control</title>
     </head>
     <body>
-        <h1 id="myTitle">Cylinder control page</h1>
+        <h1 id="myTitle">CYLINDER CONTROL PAGE</h1>
+
         <div style="text-align: center">
             <span id='info'>
                 <span id = "epoch"> Time: epoch </span><br />Inclination in degrees: <span id='inclination'></span>
             </span>
         </div>
 
-        <p>Click the <span id="controlButtonSpan">left button</span>  to start cylinder control, click the <span id="centerButtonSpan">button in the center</span> to move the mass to the center of the cylinder, click the <span id="stabButtonSpan">right button</span> to run the stabilization algorithm.</p>
-        <!-- Creating buttons-->
-        <div style="text-align: center" id="buttons">
-            <button id="controlButton" onclick="resetSlider();" class="button">Control</button>
-            <button id="centerButton" class="button button1">Center</button>
-            <button id="stabilizationButton" class="button button2">Stabilisation</button>
+        <div style="text-align: center" id="shutdown">
+            <button id="shutdownButton" class="button buttonOff">Shutdown</button>
+            &nbsp;
+        </div>
+
+        <script>
+            document.getElementById('shutdown').addEventListener('click', function(event) {
+                var buttonName=event.target.id;
+                var algorithm=buttonName.replace('Button','');
+                var divName=buttonName.replace('Button','Div');
+                // opacityOff('shutdownButton');
+                event.target.innerHTML = "Shutting down...";
+                document.getElementById('toHide').style.display='none';
+                showDiv(divName);
+                sendObjectMessage(ws, {event: 'algorithm', value: algorithm});
+            });
+        </script>
+
+        <div id="shutdownDiv" style="display:none; text-align: center" class="answer_list">
+            <p>Please wait for the green LED of the Raspberry Pi to turn off before taking the batteries out.</p>
+        </div>
+
+        <div id=toHide>
+            <p>Click the <span id="controlButtonSpan">left button</span>  to start cylinder control, click the <span id="centerButtonSpan">button in the center</span> to move the mass to the center of the cylinder, click the <span id="stabButtonSpan">right button</span> to run the stabilization algorithm.</p>
+            <!-- Creating buttons-->
+            <div style="text-align: center" id="buttons">
+                <button id="controlButton" onclick="resetSlider();" class="button">Control</button>
+                <button id="centerButton" class="button button1">Center</button>
+                <button id="stabilizationButton" class="button button2">Stabilisation</button>
+            </div>
+
+            <div id="controlDiv" style="display:none; text-align: center" class="answer_list">
+                <p>Move the slider to modify the radius of the circle on which the mass moves, the negative values make the cylinder roll backwards.</p>
+                <input type="range" min="-40" max="40" step="1" id="slider" style="width: 500px; text-align: center" list="tickmarks">
+                <datalist id="tickmarks">
+                    <option>-40</option>
+                    <option>-30</option>
+                    <option>-20</option>
+                    <option>-10</option>
+                    <option>0</option>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                    <option>40</option>
+                </datalist>
+                <p>
+                <div id="sliderValue"> Current radius: 0 [mm]</div>
+                </p>
+            </div>
+
+            <div id="stabilizationDiv" style="display:none; text-align: center" class="answer_list">
+                <p>Place the cylinder on a rigid slope and vary the incline. The cylinder should sway and rebalance up to a certain angle.</p>
+            </div>
+
+            <div id="centerDiv" style="display:none; text-align: center" class="answer_list">
+                <p>The mass will be placed in the center of the cylinder and remain there. This allows to make the cylinder a symmetrical rigid body, which signifies it will continue to roll freely, if it already had a speed.</p>
+            </div>
         </div>
 
         <script>
@@ -25,9 +77,9 @@
                 var buttonName=event.target.id;
                 var algorithm=buttonName.replace('Button','');
                 var divName=buttonName.replace('Button','Div');
-                opacityOf('controlButton');
-                opacityOf('centerButton');
-                opacityOf('stabilizationButton');
+                opacityOff('controlButton');
+                opacityOff('centerButton');
+                opacityOff('stabilizationButton');
                 opacityOn(buttonName);
                 hideDiv('controlDiv');
                 hideDiv('centerDiv');
@@ -35,39 +87,7 @@
                 showDiv(divName);
                 sendObjectMessage(ws, {event: 'algorithm', value: algorithm});
             });
-
-
-
         </script>
-
-        <div id="controlDiv" style="display:none; text-align: center" class="answer_list">
-            <p>Move the slider to modify the radius of the circle on which the mass moves, the negative values make the cylinder roll backwards.</p>
-            <input type="range" min="-40" max="40" step="1" id="slider" style="width: 500px; text-align: center" list="tickmarks">
-            <datalist id="tickmarks">
-                <option>-40</option>
-                <option>-30</option>
-                <option>-20</option>
-                <option>-10</option>
-                <option>0</option>
-                <option>10</option>
-                <option>20</option>
-                <option>30</option>
-                <option>40</option>
-            </datalist>
-            <p>
-            <div id="sliderValue"> Current radius: 0 [mm]</div>
-            </p>
-        </div>
-
-        <div id="stabilizationDiv" style="display:none; text-align: center" class="answer_list">
-            <p>Place the cylinder on a rigid slope and vary the incline. The cylinder should sway and rebalance up to a certain angle.</p>
-        </div>
-
-        <div id="centerDiv" style="display:none; text-align: center" class="answer_list">
-            <p>The mass will be placed in the center of the cylinder and remain there. This allows to make the cylinder a symmetrical rigid body, which signifies it will continue to roll freely, if it already had a speed.</p>
-        </div>
-
-        
     </body>
 
 
@@ -112,7 +132,7 @@
             document.getElementById(id).style.opacity = 1;
         }
 
-        function opacityOf(id) {
+        function opacityOff(id) {
             document.getElementById(id).style.opacity = 0.5;
         }
 

@@ -1,7 +1,7 @@
 const debug = require('debug')('wc:index'); // wc for web control
 const Five = require('johnny-five');
 const Board = require('../preferences.js').Board;
-
+var exec = require('child_process').exec; // for shutdown
 debug('Packages required');
 
 const cylinderPrototype = require('../preferences.js').cylinderPrototype;
@@ -15,7 +15,6 @@ let rpi = new Board();
 var board = new Five.Board({
   io: rpi
 });
-
 debug('board created');
 
 const toPrototypeInclination = require('./features/gyroToProto3Angle');
@@ -54,14 +53,15 @@ board.on('ready', async function () {
     if (remotePrefs.ws) {
       remotePrefs.ws.send(inclination);
     }
-
     debug('inclination' + '\t' + inclination);
 
     const baseAngle = toPrototypeInclination(inclination);
     var angleCenter;
     var radiusCenter;
 
-    if (remotePrefs.algorithm === 'control') {
+    if (remotePrefs.algorithm === 'shutdown') {
+      exec('echo hi'); //shutting down
+    } else if (remotePrefs.algorithm === 'control') {
       angleCenter = await control(baseAngle, remotePrefs);
       radiusCenter = Math.abs(remotePrefs.radius);
     } else if (remotePrefs.algorithm === 'center') {

@@ -16,13 +16,14 @@ select  {
 }
 /* the use of an # in css allows to add specific parameters to an id, this means that the modifications will apply on an unique piece of code*/
 #myTitle {
+    font-size: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
     text-align: center;
 }
 
 #info {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 #controlButtonSpan {
@@ -38,6 +39,10 @@ select  {
 
 #sliderValue {
     font-size: 15px;
+}
+
+#shutdown {
+    padding: 30px 0px 30px 0px;
 }
 
 /* taken from https://www.w3schools.com/css/css3_buttons.asp*/
@@ -59,6 +64,8 @@ select  {
 
 .button1 {background-color: #008CBA;} /* Blue */
 .button2 {background-color: #f44336;} /* Red */
+
+.buttonOff {background-color: #742bc7;} /* Purple, for shutdown */
 /* end*/
 
 /* switch taken on https://codepen.io/bbodine1/pen/novBm
