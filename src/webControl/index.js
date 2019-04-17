@@ -1,13 +1,21 @@
+'use strict';
+
+// main project code
+const exec = require('child_process').exec; // for shutdown
+
 const debug = require('debug')('wc:index'); // wc for web control
 const Five = require('johnny-five');
+
 const Board = require('../preferences.js').Board;
-var exec = require('child_process').exec; // for shutdown
+
 debug('Packages required');
 
 const cylinderPrototype = require('../preferences.js').cylinderPrototype;
+
 debug('cylinder parameters required');
 
 const remotePrefs = require('./ws');
+
 debug('prefs required');
 
 let rpi = new Board();
@@ -21,7 +29,8 @@ const toPrototypeInclination = require('./features/gyroToProto3Angle');
 const toAlpha = require('./features/toAlphaFunction');
 const control = require('./features/control');
 const stable = require('./features/stable');
-const stablePid = require('./features/stable-pid');
+const stablePid = require('./features/pid/speed-pid');
+
 debug('toAlpha, toPrototypeInclination, control functions required');
 
 board.on('ready', async function () {
@@ -33,34 +42,33 @@ board.on('ready', async function () {
 
   // var counter = 0; // to count the number of changes
   var inclinationLog = [0, 0];
-  var stabilizationPID = {
-    previousInclination: 0,
-    currentInclination: 0,
-    targetInclination: 0,
-    radiusCenter: 0
+  var pid = {
+    currentSpeed: 0,
+    targetSpeed: 0,
+    currentRadius: 0
   };
+
   var angleCenterLog = [0];
+
+  let previousAcc;
 
   accelerometer.on('change', async function () {
     // let newCounter = counter++;
     // debug('Number of changes detected: ' + newCounter);
-
-    const result = {
-      inclination: this.inclination
-    };
-    let inclination = result.inclination;
+    let acc = this;
+    acc.time = process.hrtime();
 
     if (remotePrefs.ws) {
-      remotePrefs.ws.send(inclination);
+      remotePrefs.ws.send(acc.inclination);
     }
-    debug('inclination' + '\t' + inclination);
+    debug(`${'inclination' + '\t'}${acc.inclination}`);
 
-    const baseAngle = toPrototypeInclination(inclination);
+    const baseAngle = toPrototypeInclination(acc.inclination);
     var angleCenter;
     var radiusCenter;
 
     if (remotePrefs.algorithm === 'shutdown') {
-      exec('shutdown -h now'); //shutting down
+      exec('shutdown -h now'); // shutting down
     } else if (remotePrefs.algorithm === 'control') {
       angleCenter = await control(baseAngle, remotePrefs);
       radiusCenter = Math.abs(remotePrefs.radius);
@@ -69,24 +77,21 @@ board.on('ready', async function () {
       radiusCenter = 0;
     } else if (remotePrefs.algorithm === 'stabilization') {
       inclinationLog = [inclinationLog[inclinationLog.length - 1]]; // this allows to have the two last values of inclination
-      debug('inclination log' + '\t' + inclinationLog);
+      debug(`${'inclination log' + '\t'}${inclinationLog}`);
 
-      inclinationLog.push(inclination);
-      debug('inclination log' + '\t' + inclinationLog);
+      inclinationLog.push(acc.inclination);
+      debug(`${'inclination log' + '\t'}${inclinationLog}`);
 
       angleCenter = await stable(inclinationLog, angleCenterLog);
       angleCenterLog.push(angleCenter);
 
       radiusCenter = cylinderPrototype.maxRadiusCenter;
-      debug('radiusCenter: ' + radiusCenter);
+      debug(`radiusCenter: ${radiusCenter}`);
     } else if (remotePrefs.algorithm === 'pid') {
-      stabilizationPID.previousInclination =
-        stabilizationPID.currentInclination;
-      stabilizationPID.currentInclination = inclination;
+      debug(`${'inclination log' + '\t'}${pid}`);
 
-      debug('inclination log' + '\t' + stabilizationPID);
+      radiusCenter = stablePid(pid);
 
-      radiusCenter = stablePid(stabilizationPID);
       if (radiusCenter < 0) {
         angleCenter = baseAngle - 90;
       } else {
@@ -97,5 +102,7 @@ board.on('ready', async function () {
     }
 
     await toAlpha(radiusCenter, angleCenter);
+
+    previousAcc = acc;
   });
 });
