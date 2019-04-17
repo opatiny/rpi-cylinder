@@ -60,7 +60,7 @@ board.on('ready', async function () {
     var radiusCenter;
 
     if (remotePrefs.algorithm === 'shutdown') {
-      exec('echo hi'); //shutting down
+      exec('shutdown -h now'); //shutting down
     } else if (remotePrefs.algorithm === 'control') {
       angleCenter = await control(baseAngle, remotePrefs);
       radiusCenter = Math.abs(remotePrefs.radius);
