@@ -2,7 +2,7 @@
 
 // testing getSpeed
 
-const getSpeed = require('./getSpeed.js');
+const getSpeed = require('../getSpeed');
 
 let acc1 = {
   inclination: 0,

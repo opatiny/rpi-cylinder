@@ -10,7 +10,7 @@ function stable(inclinationLog, angleCenterLog) {
 
 
   let previousAngleCenter = angleCenterLog[angleCenterLog.length - 1];// this allows to have the last values of angleCenter
-  debug(`${'previousAngleCenter' + '\t'}${previousAngleCenter}`);
+  debug(`${previousAngleCenter}\t${previousAngleCenter}`);
 
 
   let inclinationDiff = inclinationLog[inclinationLog.length - 1].toPrecision(3) - inclinationLog[inclinationLog.length - 2].toPrecision(4);
@@ -26,7 +26,7 @@ function stable(inclinationLog, angleCenterLog) {
   } else {
     angleCenter = previousAngleCenter + 0.5;
   }
-  debug(`${'angleCenter' + '\t'}${angleCenter}`);
+  debug(`${angleCenter}\t${angleCenter}`);
 
 
   return angleCenter;
