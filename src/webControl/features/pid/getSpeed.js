@@ -4,10 +4,10 @@
 
 const debug = require('debug')('wc:pid/getSpeed'); // wc for web control
 
-function getSpeed(acc, previousAcc) {
-  let angleDiff = acc.inclination - previousAcc.inclination;
-  let timeDiff = getTimeDiff(acc.time, previousAcc.time);
-  debug(timeDiff);
+function getSpeed(inclinations, times) {
+  let angleDiff = inclinations.current - inclinations.previous;
+  let timeDiff = getTimeDiff(times.current, times.previous);
+  debug(`timeDiff\t${timeDiff}`);
 
   return angleDiff / timeDiff;
 }

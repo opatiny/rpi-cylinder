@@ -1,33 +1,27 @@
 'use strict';
 
-// code that allows the cylinder to remain balanced on a gentle slope.
+// code that allows the cylinder to remain balanced on a gentle slope (of max 3 degrees).
 // The radius of the circle the mass is on (radiusCenter, --r) and if it goes backwards (--d b) or forwards (--d f) are parameters.
 
 const debug = require('debug')('wc:stable'); // wc for web control
 
-function stable(inclinationLog, angleCenterLog) {
+function stable(status) {
   var angleCenter;
 
-
-  let previousAngleCenter = angleCenterLog[angleCenterLog.length - 1];// this allows to have the last values of angleCenter
-  debug(`${previousAngleCenter}\t${previousAngleCenter}`);
-
-
-  let inclinationDiff = inclinationLog[inclinationLog.length - 1].toPrecision(3) - inclinationLog[inclinationLog.length - 2].toPrecision(4);
-  debug(`inclinationDiff ${inclinationDiff}`);
+  let inclinationDiff = status.inclination.current.toPrecision(3) - status.inclination.previous.toPrecision(3);
+  debug(`inclinationDiff\t${inclinationDiff}`);
 
   // const maxInclinationDiff = 1.4; // we estimate what it could be to make the servos reaction proportional
   // const proportionalStep = inclinationDiff / 0.75;
 
   if (inclinationDiff < 0) {
-    angleCenter = previousAngleCenter - 0.5;
+    angleCenter = status.previousAngleCenter - 0.5;
   } else if (inclinationDiff === 0) {
-    angleCenter = previousAngleCenter;
+    angleCenter = status.previousAngleCenter;
   } else {
-    angleCenter = previousAngleCenter + 0.5;
+    angleCenter = status.previousAngleCenter + 0.5;
   }
-  debug(`${angleCenter}\t${angleCenter}`);
-
+  debug(`angleCenter\t${angleCenter}`);
 
   return angleCenter;
 }

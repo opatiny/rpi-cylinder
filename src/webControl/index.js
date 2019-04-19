@@ -27,7 +27,7 @@ const control = require('./features/control');
 const stable = require('./features/stable');
 const speedPID = require('./features/pid/speed-pid');
 
-debug('toAlpha, toPrototypeInclination, control functions required');
+debug('functions required');
 
 board.on('ready', async function () {
   var accelerometer = new Five.Accelerometer({
@@ -39,14 +39,17 @@ board.on('ready', async function () {
   // defining a general object passed to all the subfunctions
   let status = {
     angleCenter: 0,
+    previousAngleCenter: 0,
     radiusCenter: 0,
     remotePrefs: require('./ws'),
-    acc: {
-      current: {},
-      previous: {}
+    inclination: {
+      current: 0,
+      previous: 0
     },
-    inclinationLog: [0, 0],
-    angleCenterLog: [0],
+    time: {
+      current: [0, 0],
+      previous: [0, 0]
+    },
     pid: {
       currentSpeed: 0,
       targetSpeed: 0,
@@ -59,15 +62,14 @@ board.on('ready', async function () {
   accelerometer.on('change', async function () {
     // let newCounter = counter++;
     // debug('Number of changes detected: ' + newCounter);
-    status.acc.current = this;
-    status.acc.current.time = process.hrtime();
+    status.inclination.current = this.inclination;
+    status.time.current = process.hrtime();
 
     if (status.remotePrefs.ws) {
-      status.remotePrefs.ws.send(status.acc.current.inclination);
+      status.remotePrefs.ws.send(status.inclination.current);
     }
-    debug(`inclination\t${status.acc.current.inclination}`);
 
-    const baseAngle = toPrototypeInclination(status.acc.current.inclination);
+    const baseAngle = toPrototypeInclination(status.inclination.current);
 
     if (status.remotePrefs.algorithm === 'shutdown') {
       exec('shutdown -h now'); // shutting down
@@ -78,19 +80,11 @@ board.on('ready', async function () {
       status.angleCenter = 0;
       status.radiusCenter = 0;
     } else if (status.remotePrefs.algorithm === 'stabilization') {
-      status.inclinationLog = [status.inclinationLog[status.inclinationLog.length - 1]]; // this allows to have the two last values of inclination
-      debug(`inclination log\t${status.inclinationLog}`);
-
-      status.inclinationLog.push(status.acc.inclination);
-      debug(`inclination log\t${status.inclinationLog}`);
-
-      status.angleCenter = await stable(status.inclinationLog, status.angleCenterLog);
-      status.angleCenterLog.push(status.angleCenter);
-
+      status.angleCenter = await stable(status);
       status.radiusCenter = cylinderPrototype.maxRadiusCenter;
       debug(`radiusCenter: ${status.radiusCenter}`);
     } else if (status.remotePrefs.algorithm === 'pid') {
-      debug(`pid object\t${status.pid}`);
+      debug(status);
 
       status.radiusCenter = speedPID(status);
 
@@ -100,12 +94,18 @@ board.on('ready', async function () {
       } else {
         status.angleCenter = baseAngle + 90;
       }
+
+      // taking absolute value of radius, which is needed by toAlpha()
+      status.radiusCenter = Math.abs(status.radiusCenter);
+
       console.log('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
     }
 
     await toAlpha(status.radiusCenter, status.angleCenter); // is this line useful?
 
-    status.acc.previous = status.acc.current;
+    status.inclination.previous = status.inclination.current;
+    status.time.previous = status.time.current;
     status.pid.previousRadius = status.radiusCenter;
+    status.previousAngleCenter = status.angleCenter;
   });
 });

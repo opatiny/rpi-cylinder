@@ -14,36 +14,41 @@ const maxRadius = 40;
 const getSpeed = require('./getSpeed');
 const Controller = require('./pid-lib');
 
+// parameters to optimize with test-and-trial
 let controller = new Controller({
-  kP: 0.25,
+  kP: 0.05,
   kI: 0.01,
   kD: 0.01
 });
 
-/* pid must contain:
-    - current speed
-    - target speed
-    - current radiusCenter
 
-   code returns: new radiusCenter
-*/
-
+/**
+ * PID algorithm returning radiusCenter for a given target angular speed
+ * @param {object} status
+ * @returns {number} radiusCenter in mm
+ */
 function stable(status) {
-  status.pid.currentSpeed = getSpeed(status.acc.current, status.acc.previous);
+  let radiusCenter;
 
-  debug({ pid: status.pid });
+  status.pid.currentSpeed = getSpeed(status.inclination, status.time);
+
   controller.setTarget(status.pid.targetSpeed);
 
   let correction = controller.update(status.pid.currentSpeed);
-  debug(status.pid.previousRadius, correction);
+  debug(`correction\t${correction}`);
 
-  status.radiusCenter = status.pid.previousRadius + correction;
+  radiusCenter = status.pid.previousRadius + correction;
+  debug(`radiusCenter\t${radiusCenter}`);
 
-  if (status.radiusCenter > maxRadius) {
-    status.radiusCenter = maxRadius;
-  } else if (status.radiusCenter < -maxRadius) {
-    status.radiusCenter = -maxRadius;
+  if (radiusCenter > maxRadius) {
+    radiusCenter = maxRadius;
+  } else if (radiusCenter < -maxRadius) {
+    radiusCenter = -maxRadius;
   }
+
+  console.log(radiusCenter);
+
+  return radiusCenter;
 }
 
 module.exports = stable;

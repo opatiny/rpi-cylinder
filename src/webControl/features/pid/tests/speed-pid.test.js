@@ -1,25 +1,19 @@
 'use strict';
 
-// testing getSpeed
+// testing speed-pid
 
 const speedPID = require('../speed-pid');
-
-let acc1 = {
-  inclination: 0,
-  time: [108928, 47043146]
-};
-
-let acc2 = {
-  inclination: 10,
-  time: [108931, 263604850]
-};
 
 let status = {
   angleCenter: 0,
   radiusCenter: 0,
-  acc: {
-    current: acc2,
-    previous: acc1
+  inclination: {
+    current: 10,
+    previous: 0
+  },
+  time: {
+    current: [108931, 263604850],
+    previous: [108928, 47043146]
   },
   pid: {
     currentSpeed: 0,
@@ -28,6 +22,4 @@ let status = {
   },
 };
 
-speedPID(status);
-
-console.log(status.radiusCenter);
+console.log(speedPID(status));
