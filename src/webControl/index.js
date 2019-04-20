@@ -64,6 +64,8 @@ board.on('ready', async function () {
       targetSpeed: 0,
       previousRadius: 0,
     },
+    logs: [],
+    timeSpan: 0
   };
 
   status.remotePrefs.algorithm = 'pid'; // testing pid
