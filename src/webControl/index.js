@@ -106,7 +106,7 @@ board.on('ready', async function () {
     } else if (status.remotePrefs.algorithm === 'center') {
       status.angleCenter = 0;
       status.radiusCenter = 0;
-    } else if (status.remotePrefs.algorithm === 'stabilization') {
+    } else if (status.remotePrefs.algorithm === 'basic-stabilization') {
       status.angleCenter = await stable(status);
       status.radiusCenter = cylinderPrototype.maxRadiusCenter;
       debug(`radiusCenter: ${status.radiusCenter}`);
@@ -129,12 +129,12 @@ board.on('ready', async function () {
         // taking absolute value of radius, which is needed by toAlpha()
         status.radiusCenter = Math.abs(status.radiusCenter);
       }
-    } else if (status.remotePrefs.algorithm === 'angle-pid') {
+    } else if (status.remotePrefs.algorithm === 'stabilization') { // aka angle-pid
       status.pid.currentAngle = status.absoluteAngle.current;
       if (status.pid.targetAngle === undefined) {
         status.pid.targetAngle = status.absoluteAngle.current;
       }
-      console.log('targetAngle: ', status.pid.targetAngle, 'currentAngle: ', status.pid.currentAngle);
+      debug('targetAngle: ', status.pid.targetAngle, 'currentAngle: ', status.pid.currentAngle);
       status.radiusCenter = anglePID(status);
 
       // placing the mass on a line horizontal to the ground
