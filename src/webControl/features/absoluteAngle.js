@@ -2,21 +2,26 @@
 
 // converting angle between -180 and 180 degrees to angle between -Infinity and Infinity degrees
 
-const debug = require('debug')('wc:pid/getSpeed'); // wc for web control
+const debug = require('debug')('wc:absoluteAngle'); // wc for web control
 
+/**
+ * Modifies status.absoluteAngle.current: absolute inclination of the cylinder
+ * in degrees (instead of an "oscillating" value between -160 and 180 degrees).
+ * @param {object} status
+ */
 function updateAbsoluteAngle(status) {
   let angleDiff = status.inclination.current - status.inclination.previous;
-  console.log(angleDiff);
+  debug(`angleDiff\t${angleDiff}`);
 
   if (angleDiff > 100) {
-    status.absoluteAngle += (angleDiff - 360);
+    status.absoluteAngle.current += (angleDiff - 360);
   } else if (angleDiff < -100) {
-    status.absoluteAngle += (angleDiff + 360);
+    status.absoluteAngle.current += (angleDiff + 360);
   } else {
-    status.absoluteAngle += angleDiff;
+    status.absoluteAngle.current += angleDiff;
   }
 
-  debug(status.absoluteAngle);
+  debug(`status.absoluteAngle\t${status.absoluteAngle}`);
 }
 
 module.exports = updateAbsoluteAngle;

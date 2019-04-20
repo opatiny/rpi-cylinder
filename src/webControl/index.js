@@ -43,6 +43,10 @@ board.on('ready', async function () {
     previousAngleCenter: 0,
     radiusCenter: 0,
     remotePrefs: require('./ws'),
+    absoluteAngle: {
+      current: 0,
+      previous: 0
+    },
     inclination: {
       current: 0,
       previous: 0
@@ -56,10 +60,9 @@ board.on('ready', async function () {
       targetSpeed: 0,
       previousRadius: 0,
     },
-    absoluteAngle: 0,
   };
 
-  // status.remotePrefs.algorithm = 'pid'; // testing pid
+  status.remotePrefs.algorithm = 'pid'; // testing pid
 
   accelerometer.on('change', async function () {
     // let newCounter = counter++;
@@ -102,11 +105,12 @@ board.on('ready', async function () {
       // taking absolute value of radius, which is needed by toAlpha()
       status.radiusCenter = Math.abs(status.radiusCenter);
 
-      debug('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
+      console.log('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
     }
 
     await toAlpha(status.radiusCenter, status.angleCenter); // is this line useful?
 
+    status.absoluteAngle.previous = status.absoluteAngle.current;
     status.inclination.previous = status.inclination.current;
     status.time.previous = status.time.current;
     status.pid.previousRadius = status.radiusCenter;

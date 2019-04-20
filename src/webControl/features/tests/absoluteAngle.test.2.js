@@ -11,6 +11,10 @@ let status = {
     current: -175,
     previous: 170
   },
+  absoluteAngle: {
+    current: 0,
+    previous: 0
+  },
   time: {
     current: [108931, 263604850],
     previous: [108928, 47043146]
@@ -20,7 +24,6 @@ let status = {
     targetSpeed: 0,
     previousRadius: 0,
   },
-  absoluteAngle: 0
 };
 
 updateAbsoluteAngle(status);

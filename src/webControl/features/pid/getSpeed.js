@@ -4,8 +4,14 @@
 
 const debug = require('debug')('wc:pid/getSpeed'); // wc for web control
 
-function getSpeed(inclinations, times) {
-  let angleDiff = inclinations.current - inclinations.previous;
+/**
+ * Computes the angular speed from angles and times
+ * @param {object} angles in degrees
+ * @param {object} times in the hrtime format
+ * @returns {number} angular speed in degrees/second
+ */
+function getSpeed(angles, times) {
+  let angleDiff = angles.current - angles.previous;
   let timeDiff = getTimeDiff(times.current, times.previous);
   debug(`timeDiff\t${timeDiff}`);
 
@@ -13,7 +19,7 @@ function getSpeed(inclinations, times) {
 }
 
 /**
- * CalculateS the time difference in seconds between 2 hrtimes
+ * Calculates the time difference in seconds between 2 hrtimes
  * @param {array} hrtime
  * @param {array} previousHrtime
  * @returns {number} time difference in seconds

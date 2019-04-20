@@ -7,6 +7,10 @@ const updateAbsoluteAngle = require('../absoluteAngle');
 let status = {
   angleCenter: 0,
   radiusCenter: 0,
+  absoluteAngle: {
+    current: 0,
+    previous: 0
+  },
   inclination: {
     current: 160,
     previous: -160
@@ -20,7 +24,6 @@ let status = {
     targetSpeed: 0,
     previousRadius: 0,
   },
-  absoluteAngle: 0
 };
 
 updateAbsoluteAngle(status);

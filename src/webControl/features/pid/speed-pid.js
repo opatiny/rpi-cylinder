@@ -30,7 +30,7 @@ let controller = new Controller({
 function stable(status) {
   let radiusCenter;
 
-  status.pid.currentSpeed = getSpeed(status.inclination, status.time);
+  status.pid.currentSpeed = getSpeed(status.absoluteAngle, status.time);
 
   controller.setTarget(status.pid.targetSpeed);
 
