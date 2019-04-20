@@ -26,6 +26,7 @@ const toAlpha = require('./features/toAlphaFunction');
 const control = require('./features/control');
 const stable = require('./features/stable');
 const speedPID = require('./features/pid/speed-pid');
+const updateAbsoluteAngle = require('./features/absoluteAngle');
 
 debug('functions required');
 
@@ -55,15 +56,18 @@ board.on('ready', async function () {
       targetSpeed: 0,
       previousRadius: 0,
     },
+    absoluteAngle: 0,
   };
 
-  status.remotePrefs.algorithm = 'pid'; // testing pid
+  // status.remotePrefs.algorithm = 'pid'; // testing pid
 
   accelerometer.on('change', async function () {
     // let newCounter = counter++;
     // debug('Number of changes detected: ' + newCounter);
     status.inclination.current = this.inclination;
     status.time.current = process.hrtime();
+
+    updateAbsoluteAngle(status);
 
     if (status.remotePrefs.ws) {
       status.remotePrefs.ws.send(status.inclination.current);
@@ -98,7 +102,7 @@ board.on('ready', async function () {
       // taking absolute value of radius, which is needed by toAlpha()
       status.radiusCenter = Math.abs(status.radiusCenter);
 
-      console.log('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
+      debug('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
     }
 
     await toAlpha(status.radiusCenter, status.angleCenter); // is this line useful?

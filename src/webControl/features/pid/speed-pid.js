@@ -46,7 +46,7 @@ function stable(status) {
     radiusCenter = -maxRadius;
   }
 
-  console.log(radiusCenter);
+  debug(radiusCenter);
 
   return radiusCenter;
 }
