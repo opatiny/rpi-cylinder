@@ -4,6 +4,8 @@
 
 const debug = require('debug')('wc:pid/getSpeed'); // wc for web control
 
+const getTimeDiff = require('./getTimeDiff');
+
 /**
  * Computes the angular speed from angles and times
  * @param {object} angles in degrees
@@ -16,16 +18,6 @@ function getSpeed(angles, times) {
   debug(`timeDiff\t${timeDiff}`);
 
   return angleDiff / timeDiff;
-}
-
-/**
- * Calculates the time difference in seconds between 2 hrtimes
- * @param {array} hrtime
- * @param {array} previousHrtime
- * @returns {number} time difference in seconds
- */
-function getTimeDiff(hrtime, previousHrtime) {
-  return (hrtime[0] - previousHrtime[0]) + (hrtime[1] - previousHrtime[1]) / 1e9;
 }
 
 module.exports = getSpeed;

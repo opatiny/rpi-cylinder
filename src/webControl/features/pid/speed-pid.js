@@ -14,7 +14,7 @@ const Controller = require('./pid-lib');
 
 // parameters to optimize with test-and-trial
 let controller = new Controller({
-  kP: 0.05,
+  kP: 0.01,
   kI: 0.01,
   kD: 0.01
 });
@@ -29,11 +29,12 @@ function stable(status) {
   let radiusCenter;
 
   status.pid.currentSpeed = getSpeed(status.absoluteAngle, status.time);
+  console.log(`currentSpeed\t${status.pid.currentSpeed}`);
 
   controller.setTarget(status.pid.targetSpeed);
 
   let correction = controller.update(status.pid.currentSpeed);
-  debug(`correction\t${correction}`);
+  console.log({ correction });
 
   radiusCenter = status.pid.previousRadius + correction;
   debug(`radiusCenter\t${radiusCenter}`);
