@@ -27,6 +27,8 @@ const control = require('./features/control');
 const stable = require('./features/stable');
 const speedPID = require('./features/pid/speed-pid');
 const updateAbsoluteAngle = require('./features/absoluteAngle');
+const generateLog = require('./features/smoothSpeed/logs').generateLog;
+const manageLogs = require('./features/smoothSpeed/logs').manageLogs;
 
 debug('functions required');
 
@@ -64,20 +66,24 @@ board.on('ready', async function () {
       targetSpeed: 0,
       previousRadius: 0,
     },
+    smooth: false,
     logs: [],
-    timeSpan: 0
+    timeSpan: 500 // arbitrary value
   };
 
   status.remotePrefs.algorithm = 'pid'; // testing pid
 
   accelerometer.on('change', async function () {
-    // let newCounter = counter++;
-    // debug('Number of changes detected: ' + newCounter);
+    // updating current variables
     status.inclination.current = this.inclination;
     status.time.current = process.hrtime();
     status.epoch.current = Date.now();
 
     updateAbsoluteAngle(status);
+
+    // updating logs -> for smoothed speed
+    let log = generateLog(status);
+    manageLogs(status.logs, log, status.timeSpan);
 
     if (status.remotePrefs.ws) {
       status.remotePrefs.ws.send(status.inclination.current);
@@ -115,8 +121,9 @@ board.on('ready', async function () {
       status.radiusCenter = Math.abs(status.radiusCenter);
     }
 
-    await toAlpha(status.radiusCenter, status.angleCenter);
+    await toAlpha(status.radiusCenter, status.angleCenter); // writing servos angles
 
+    // updating previous variables
     status.absoluteAngle.previous = status.absoluteAngle.current;
     status.inclination.previous = status.inclination.current;
     status.time.previous = status.time.current;
