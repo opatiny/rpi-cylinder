@@ -16,9 +16,9 @@ let status = {
     previous: 0
   },
   logs: [],
-  timeSpan: 0
+  timeSpan: 100
 };
 
 let log = generateLog(status);
-manageLogs(status.logs, log, 500);
+manageLogs(status.logs, log, status.timeSpan); // this won't work because the epoch is not right compared to current epoch
 

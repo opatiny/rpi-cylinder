@@ -27,6 +27,8 @@ function generateLog(status) {
  */
 function manageLogs(logs, newLog, timeSpan) {
   logs.push(newLog);
+  debug(JSON.stringify(logs, undefined, 2));
+
   logs = logs.filter((entry) => entry.start > Date.now - timeSpan);
   debug(JSON.stringify(logs, undefined, 2));
 }
