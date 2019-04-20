@@ -25,6 +25,7 @@ const toPrototypeInclination = require('./features/gyroToProto3Angle');
 const toAlpha = require('./features/toAlphaFunction');
 const control = require('./features/control');
 const stable = require('./features/stable');
+const anglePID = require('./features/pid/angle-pid');
 const speedPID = require('./features/pid/speed-pid');
 const updateAbsoluteAngle = require('./features/absoluteAngle');
 const generateLog = require('./features/smoothSpeed/logs').generateLog;
@@ -62,10 +63,12 @@ board.on('ready', async function () {
       previous: 0
     },
     pid: {
-      currentSpeed: 0,
-      targetSpeed: 0,
+      currentAngle: 0,
+      targetAngle: undefined,
       previousRadius: 0,
-      lastEpoch: 0,
+      previousEpoch: 0,
+      currentSpeed: 0,
+      previousSpeed: 0
     },
     smooth: true,
     logs: [],
@@ -75,7 +78,7 @@ board.on('ready', async function () {
   // status.remotePrefs.algorithm = 'control'; // testing pid
   // status.remotePrefs.radius = 20;
 
-  status.remotePrefs.algorithm = 'pid'; // testing pid
+  status.remotePrefs.algorithm = 'angle-pid'; // testing pid
 
   accelerometer.on('change', async function () {
     // updating current variables
@@ -107,11 +110,11 @@ board.on('ready', async function () {
       status.angleCenter = await stable(status);
       status.radiusCenter = cylinderPrototype.maxRadiusCenter;
       debug(`radiusCenter: ${status.radiusCenter}`);
-    } else if (status.remotePrefs.algorithm === 'pid') {
+    } else if (status.remotePrefs.algorithm === 'speed-pid') {
       debug(status);
 
-      if ((Date.now() - status.pid.lastEpoch) > 100) {
-        status.pid.lastEpoch = Date.now();
+      if ((Date.now() - status.pid.previousEpoch) > 100) {
+        status.pid.previousEpoch = Date.now();
         status.radiusCenter = speedPID(status);
 
         // placing the mass on a line horizontal to the ground
@@ -126,6 +129,25 @@ board.on('ready', async function () {
         // taking absolute value of radius, which is needed by toAlpha()
         status.radiusCenter = Math.abs(status.radiusCenter);
       }
+    } else if (status.remotePrefs.algorithm === 'angle-pid') {
+      status.pid.currentAngle = status.absoluteAngle.current;
+      if (status.pid.targetAngle === undefined) {
+        status.pid.targetAngle = status.absoluteAngle.current;
+      }
+      console.log('targetAngle: ', status.pid.targetAngle, 'currentAngle: ', status.pid.currentAngle);
+      status.radiusCenter = anglePID(status);
+
+      // placing the mass on a line horizontal to the ground
+      if (status.radiusCenter < 0) {
+        status.angleCenter = baseAngle - 90;
+      } else {
+        status.angleCenter = baseAngle + 90;
+      }
+
+      debug('radiusCenter:', status.radiusCenter, 'angleCenter:', status.angleCenter);
+
+      // taking absolute value of radius, which is needed by toAlpha()
+      status.radiusCenter = Math.abs(status.radiusCenter);
     }
 
     await toAlpha(status.radiusCenter, status.angleCenter); // writing servos angles
