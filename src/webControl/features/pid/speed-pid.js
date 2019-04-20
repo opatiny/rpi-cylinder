@@ -5,7 +5,7 @@
 
 const debug = require('debug')('wc:speed-pid'); // wc for web control
 
-const smoothSpeed = require('../smoothSpeed/smoothSpeed');
+const getSmoothSpeed = require('../smoothSpeed/smoothSpeed');
 const cylinderPrototype = require('../../../preferences').cylinderPrototype;
 
 const maxRadius = cylinderPrototype.maxRadiusCenter;
@@ -30,20 +30,23 @@ function stable(status) {
   let radiusCenter;
 
   if (status.smooth) {
-    // getting smoothed speed
-    status.pid.currentSpeed = smoothSpeed(status);
+    status.pid.currentSpeed = getSmoothSpeed(status);
   } else {
-    status.pid.currentSpeed = getSpeed(status.absoluteAngle, status.time);
+    status.pid.currentSpeed = getSpeed(status.absoluteAngle, status.hrtime);
   }
-  console.log(`currentSpeed\t${status.pid.currentSpeed}`);
+  debug(`currentSpeed\t${status.pid.currentSpeed}`);
 
+  // hack to make the PID work
+  if (isNaN(status.pid.currentSpeed) | Math.abs(status.pid.currentSpeed) === Infinity) {
+    status.pid.currentSpeed = 0;
+  }
 
   controller.setTarget(status.pid.targetSpeed);
 
   let correction = controller.update(status.pid.currentSpeed);
-  console.log({ correction });
+  debug({ correction });
 
-  radiusCenter = status.pid.previousRadius + correction;
+  radiusCenter = status.pid.previousRadius - correction;
   debug(`radiusCenter\t${radiusCenter}`);
 
   if (radiusCenter > maxRadius) {

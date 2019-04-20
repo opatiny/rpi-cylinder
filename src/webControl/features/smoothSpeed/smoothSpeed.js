@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('wc:speed-pid'); // wc for web control
+const debug = require('debug')('wc:smoothSpeed'); // wc for web control
 
 /**
  * Returns a speed (in deg/s) smoothed on a defined time span (in ms).
@@ -9,7 +9,14 @@ const debug = require('debug')('wc:speed-pid'); // wc for web control
  */
 function smoothSpeed(status) {
   let angleDiffSum = status.logs.reduce((sum, value) => sum + value.angleDiff, 0);
-  let timeDiff = status.log[0].end - status.logs[status.logs.length() - 1].start;
+
+  let timeDiff;
+  if (status.logs.length > 1) {
+    timeDiff = (status.logs[status.logs.length - 1].end - status.logs[0].end) / 1000; // converting epoch to seconds
+  } else {
+    timeDiff = 0;
+  }
+  debug(`timeDiff\t${timeDiff}`);
 
   let smoothSpeed = angleDiffSum / timeDiff;
   debug(`smoothSpeed\t${smoothSpeed}`);

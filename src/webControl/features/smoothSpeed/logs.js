@@ -21,16 +21,15 @@ function generateLog(status) {
 
 /**
  * Function managing an array of logs. New log is added and too old ones discarded.
- * @param {array} logs array of log entries
+ * @param {object} status properties used are logs and timeSpan (in ms): time range back from now over which the logs are kept
  * @param {object} newLog log to add to logs
- * @param {number} timeSpan time range back from now over which the logs are kept
  */
-function manageLogs(logs, newLog, timeSpan) {
-  logs.push(newLog);
-  debug(JSON.stringify(logs, undefined, 2));
+function manageLogs(status, newLog) {
+  status.logs.push(newLog);
+  debug(JSON.stringify(status.logs, undefined, 2));
 
-  logs = logs.filter((entry) => entry.start > Date.now - timeSpan);
-  debug(JSON.stringify(logs, undefined, 2));
+  status.logs = status.logs.filter((entry) => entry.start > (Date.now() - status.timeSpan));
+  debug(JSON.stringify(status.logs, undefined, 2));
 }
 
 module.exports = { manageLogs, generateLog };
