@@ -15,11 +15,11 @@ const Controller = require('./pid-lib');
 
 // parameters to optimize with test-and-trial
 let controller = new Controller({
-  kP: 0.01,
-  kI: 0.01,
-  kD: 0.01
+  kP: 0.05,
+  kI: 0.2,
+  kD: 0.05,
+  // dt: 0.1 // in seconds
 });
-
 
 /**
  * PID algorithm returning radiusCenter for a given target angular speed
@@ -44,9 +44,9 @@ function stable(status) {
   controller.setTarget(status.pid.targetSpeed);
 
   let correction = controller.update(status.pid.currentSpeed);
-  debug({ correction });
+  console.log({ correction });
 
-  radiusCenter = status.pid.previousRadius - correction;
+  radiusCenter = correction;
   debug(`radiusCenter\t${radiusCenter}`);
 
   if (radiusCenter > maxRadius) {

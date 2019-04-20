@@ -65,11 +65,15 @@ board.on('ready', async function () {
       currentSpeed: 0,
       targetSpeed: 0,
       previousRadius: 0,
+      lastEpoch: 0,
     },
     smooth: true,
     logs: [],
-    timeSpan: 100 // arbitrary value
+    timeSpan: 100 // arbitrary value in ms
   };
+
+  // status.remotePrefs.algorithm = 'control'; // testing pid
+  // status.remotePrefs.radius = 20;
 
   status.remotePrefs.algorithm = 'pid'; // testing pid
 
@@ -94,7 +98,7 @@ board.on('ready', async function () {
     if (status.remotePrefs.algorithm === 'shutdown') {
       exec('shutdown -h now'); // shutting down
     } else if (status.remotePrefs.algorithm === 'control') {
-      status.angleCenter = await control(baseAngle, status.remotePrefs); // try with status.acc.current.inclination instead of baseAngle
+      status.angleCenter = await control(baseAngle, status.remotePrefs);
       status.radiusCenter = Math.abs(status.remotePrefs.radius);
     } else if (status.remotePrefs.algorithm === 'center') {
       status.angleCenter = 0;
@@ -106,19 +110,22 @@ board.on('ready', async function () {
     } else if (status.remotePrefs.algorithm === 'pid') {
       debug(status);
 
-      status.radiusCenter = speedPID(status);
+      if ((Date.now() - status.pid.lastEpoch) > 100) {
+        status.pid.lastEpoch = Date.now();
+        status.radiusCenter = speedPID(status);
 
-      // placing the mass on a line horizontal to the ground
-      if (status.radiusCenter < 0) {
-        status.angleCenter = baseAngle + 90;
-      } else {
-        status.angleCenter = baseAngle - 90;
+        // placing the mass on a line horizontal to the ground
+        if (status.radiusCenter < 0) {
+          status.angleCenter = baseAngle - 90;
+        } else {
+          status.angleCenter = baseAngle + 90;
+        }
+
+        debug('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
+
+        // taking absolute value of radius, which is needed by toAlpha()
+        status.radiusCenter = Math.abs(status.radiusCenter);
       }
-
-      console.log('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
-
-      // taking absolute value of radius, which is needed by toAlpha()
-      status.radiusCenter = Math.abs(status.radiusCenter);
     }
 
     await toAlpha(status.radiusCenter, status.angleCenter); // writing servos angles
