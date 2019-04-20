@@ -4,6 +4,12 @@
 
 const debug = require('debug')('wc:control'); // wc for web control
 
+/**
+ * Keeping the mass on a line parallel to the ground, at a given radius from the center of the cylinder.
+ * @param {number} baseAngle in degrees
+ * @param {object} prefs preferences imported from the web page
+ * @returns {number} angleCenter in degrees
+ */
 function control(baseAngle, prefs) {
   var angleCenter;
   if (prefs.radius < 0) {

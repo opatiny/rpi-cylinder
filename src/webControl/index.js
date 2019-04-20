@@ -108,7 +108,7 @@ board.on('ready', async function () {
       console.log('radiusCenter: ', status.radiusCenter, 'angleCenter: ', status.angleCenter);
     }
 
-    await toAlpha(status.radiusCenter, status.angleCenter); // is this line useful?
+    await toAlpha(status.radiusCenter, status.angleCenter);
 
     status.absoluteAngle.previous = status.absoluteAngle.current;
     status.inclination.previous = status.inclination.current;

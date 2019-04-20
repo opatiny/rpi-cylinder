@@ -5,11 +5,9 @@
 
 const debug = require('debug')('wc:speed-pid'); // wc for web control
 
-// const cylinderPrototype = require('../../../preferences').cylinderPrototype;
+const cylinderPrototype = require('../../../preferences').cylinderPrototype;
 
-// const maxRadius = cylinderPrototype.maxRadiusCenter;
-
-const maxRadius = 40;
+const maxRadius = cylinderPrototype.maxRadiusCenter;
 
 const getSpeed = require('./getSpeed');
 const Controller = require('./pid-lib');

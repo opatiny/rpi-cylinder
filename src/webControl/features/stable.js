@@ -5,6 +5,11 @@
 
 const debug = require('debug')('wc:stable'); // wc for web control
 
+/**
+ * Stabilization function for the cylinder: doesn't work very well. The cylinder starts increasingly oscillating.
+ * @param {object} status global object with all the properties
+ * @returns {number} angleCenter in degrees
+ */
 function stable(status) {
   var angleCenter;
 

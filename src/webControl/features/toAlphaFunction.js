@@ -11,23 +11,33 @@ debug('servos required');
 
 const cylinderPrototype = require('../../preferences.js').cylinderPrototype;
 
-debug('Parameters and packages required');
+const maxRadius = cylinderPrototype.maxRadiusCenter;
 
+debug('cylinderPrototype required');
+
+/**
+ * Async function that writes the 3 servos angles (in degrees) depending on radiusCenter and angleCenter
+ * @param {number} radiusCenter in mm, limited by hardware max radius
+ * @param {number} angleCenter in degrees
+ */
 async function toAlpha(radiusCenter, angleCenter) {
+  if (radiusCenter > maxRadius) { // limiting radiusCenter to maximum prototype radius for hardware security
+    radiusCenter = maxRadius;
+  }
   debug(`radiusCenter\t${radiusCenter}`);
 
   const delayValue = 25; // the time to wait between to values of the angles in [ms]
 
   // parameters that depend on the prototype you use
-  const radiusServo = cylinderPrototype.radiusServo; // rayon défini par l'axe du servo en [mm]
+  const radiusServo = cylinderPrototype.radiusServo; // servo arm length in [mm]
   const bigRadius = cylinderPrototype.bigRadius; // distance between center of cylinder and center of servo [mm]
   const distance = cylinderPrototype.distance; // distance between point on center circle of cylinder and end of servo axis [mm]
 
-  // parameters that depend on the servo characteristics
-  const infoServo1 = cylinderPrototype.infoServo1; // parameters of the angles of servo1
-  const infoServo2 = cylinderPrototype.infoServo2; // parameters of the angles of servo2
-  const infoServo3 = cylinderPrototype.infoServo3; // parameters of the angles of servo3
-  const setServoAngle = cylinderPrototype.setServoAngle; // function transforming angles of the servos setServoAngle()
+  // parameters that depend on the servo characteristics (calibration)
+  const infoServo1 = cylinderPrototype.infoServo1;
+  const infoServo2 = cylinderPrototype.infoServo2;
+  const infoServo3 = cylinderPrototype.infoServo3;
+  const setServoAngle = cylinderPrototype.setServoAngle; // math formula returning servo angle
 
   const formula = require('../../returnAngleFormula.js');
 

@@ -1,10 +1,15 @@
 'use strict';
 
-// function that accepts 'inclination', a this. property of accelerometer.
+// function that accepts 'inclination', a this property of accelerometer.
 // It returns the angle corrected and adapted to cp3.
 
 const debug = require('debug')('wc:gyroToProtoAngle'); // wc for web control
 
+/**
+ * Returns the angle for the mass that would define a perpendicular with the ground (for cp3) based on the inclination information
+ * @param {number} inclination in degrees
+ * @returns baseAngle in degrees
+ */
 function toPrototypeInclination(inclination) {
   if (inclination < 0) {
     inclination = Math.abs(inclination);
