@@ -66,9 +66,9 @@ board.on('ready', async function () {
       targetSpeed: 0,
       previousRadius: 0,
     },
-    smooth: false,
+    smooth: true,
     logs: [],
-    timeSpan: 500 // arbitrary value
+    timeSpan: 100 // arbitrary value
   };
 
   status.remotePrefs.algorithm = 'pid'; // testing pid
@@ -76,14 +76,14 @@ board.on('ready', async function () {
   accelerometer.on('change', async function () {
     // updating current variables
     status.inclination.current = this.inclination;
-    status.time.current = process.hrtime();
+    status.hrtime.current = process.hrtime();
     status.epoch.current = Date.now();
 
     updateAbsoluteAngle(status);
 
     // updating logs -> for smoothed speed
     let log = generateLog(status);
-    manageLogs(status.logs, log, status.timeSpan);
+    manageLogs(status, log);
 
     if (status.remotePrefs.ws) {
       status.remotePrefs.ws.send(status.inclination.current);
@@ -126,7 +126,7 @@ board.on('ready', async function () {
     // updating previous variables
     status.absoluteAngle.previous = status.absoluteAngle.current;
     status.inclination.previous = status.inclination.current;
-    status.time.previous = status.time.current;
+    status.hrtime.previous = status.hrtime.current;
     status.epoch.previous = status.epoch.current;
     status.pid.previousRadius = status.radiusCenter;
     status.previousAngleCenter = status.angleCenter;
