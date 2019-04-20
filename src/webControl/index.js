@@ -78,9 +78,13 @@ board.on('ready', async function () {
   // status.remotePrefs.algorithm = 'control'; // testing pid
   // status.remotePrefs.radius = 20;
 
-  status.remotePrefs.algorithm = 'angle-pid'; // testing pid
+  // status.remotePrefs.algorithm = 'angle-pid'; // testing pid
 
   accelerometer.on('change', async function () {
+    if (status.remotePrefs.algorithm !== 'stabilization') {
+      status.pid.targetAngle = undefined;
+    }
+
     // updating current variables
     status.inclination.current = this.inclination;
     status.hrtime.current = process.hrtime();
