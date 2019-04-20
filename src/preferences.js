@@ -1,11 +1,11 @@
 'use strict';
 
-var cylinderPrototype = "3-rpi";
+var cylinderPrototype = '3-rpi';
 
 let RaspiIO = require('raspi-io').RaspiIO;
 
 module.exports = {
   Board: RaspiIO,
   servoPins: [0, 1, 2],
-  cylinderPrototype: require('./prefs/cylinderPrototype' + cylinderPrototype)
+  cylinderPrototype: require(`./prefs/cylinderPrototype${cylinderPrototype}`)
 };
