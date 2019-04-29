@@ -14,8 +14,8 @@ const Controller = require('./pid-lib');
 // parameters to optimize with test-and-trial
 let controller = new Controller({
   kP: 0.25,
-  kI: 0.01,
-  kD: 0.4
+  kI: 0.005,
+  kD: 0.40
 });
 
 /**
