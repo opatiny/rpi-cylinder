@@ -20,6 +20,7 @@
 
         <script>
             document.getElementById('shutdown').addEventListener('click', function(event) {
+                if(!confirm('Please confirm that you want to shutdown the device.')) return;
                 var buttonName=event.target.id;
                 var algorithm=buttonName.replace('Button','');
                 var divName=buttonName.replace('Button','Div');
