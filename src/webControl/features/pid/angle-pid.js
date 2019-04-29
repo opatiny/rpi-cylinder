@@ -15,8 +15,7 @@ const Controller = require('./pid-lib');
 let controller = new Controller({
   kP: 0.25,
   kI: 0.01,
-  kD: 0.5,
-  // dt: 0.1 // in seconds
+  kD: 0.4
 });
 
 /**
