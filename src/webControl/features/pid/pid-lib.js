@@ -1,7 +1,7 @@
 'use strict';
 
-/**
-*  PID Controller. Based on the npm package: node-pid-controller
+/*
+  PID Controller. Based on the npm package: node-pid-controller
 */
 
 class Controller {
@@ -17,7 +17,7 @@ class Controller {
     }
 
     // PID constants
-    this.kP = (typeof kP === 'number') ? kP : 1;
+    this.kP = typeof kP === 'number' ? kP : 1;
     this.kI = kI || 0;
     this.kD = kD || 0;
 
@@ -46,7 +46,8 @@ class Controller {
     let dt = this.dt;
     if (!dt) {
       let currentTime = Date.now();
-      if (this.lastTime === 0) { // First time update() is called
+      if (this.lastTime === 0) {
+        // First time update() is called
         dt = 0;
       } else {
         dt = (currentTime - this.lastTime) / 1000; // in seconds
@@ -57,17 +58,17 @@ class Controller {
       dt = 1;
     }
 
-    let error = (this.target - this.currentValue);
+    let error = this.target - this.currentValue;
     this.sumError = this.sumError + error * dt;
     if (this.iMax > 0 && Math.abs(this.sumError) > this.iMax) {
-      let sumSign = (this.sumError > 0) ? 1 : -1;
+      let sumSign = this.sumError > 0 ? 1 : -1;
       this.sumError = sumSign * this.iMax;
     }
 
     let dError = (error - this.lastError) / dt;
     this.lastError = error;
 
-    return (this.kP * error) + (this.kI * this.sumError) + (this.kD * dError);
+    return this.kP * error + this.kI * this.sumError + this.kD * dError;
   }
 
   reset() {

@@ -6,7 +6,8 @@ const debug = require('debug')('wc:absoluteAngle'); // wc for web control
 
 /**
  * Modifies status.absoluteAngle.current: absolute inclination of the cylinder
- * in degrees (instead of an "oscillating" value between -180 and 180 degrees).
+ * in degrees. Instead of an "oscillating" value between -180 and 180 degrees,
+ * the value goes from -Infinity to Infinity.
  * @param {object} status
  */
 function updateAbsoluteAngle(status) {
@@ -14,9 +15,9 @@ function updateAbsoluteAngle(status) {
   debug(`angleDiff\t${angleDiff}`);
 
   if (angleDiff > 100) {
-    status.absoluteAngle.current += (angleDiff - 360);
+    status.absoluteAngle.current += angleDiff - 360;
   } else if (angleDiff < -100) {
-    status.absoluteAngle.current += (angleDiff + 360);
+    status.absoluteAngle.current += angleDiff + 360;
   } else {
     status.absoluteAngle.current += angleDiff;
   }

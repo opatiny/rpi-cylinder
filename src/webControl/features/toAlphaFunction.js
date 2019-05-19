@@ -17,11 +17,12 @@ debug('cylinderPrototype required');
 
 /**
  * Async function that writes the 3 servos angles (in degrees) depending on radiusCenter and angleCenter
- * @param {number} radiusCenter in mm, limited by hardware max radius
+ * @param {number} radiusCenter in mm, limited by hardware max radius (defined in src/prefs/)
  * @param {number} angleCenter in degrees
  */
 async function toAlpha(radiusCenter, angleCenter) {
-  if (radiusCenter > maxRadius) { // limiting radiusCenter to maximum prototype radius for hardware security
+  if (radiusCenter > maxRadius) {
+    // limiting radiusCenter to maximum prototype radius for hardware security
     radiusCenter = maxRadius;
   }
   debug(`radiusCenter\t${radiusCenter}`);
@@ -43,21 +44,33 @@ async function toAlpha(radiusCenter, angleCenter) {
 
   let r = radiusCenter;
 
-  let xMassPosition1 = r * Math.cos(angleCenter / 180 * Math.PI);
-  let yMassPosition1 = r * Math.sin(angleCenter / 180 * Math.PI);
+  let xMassPosition1 = r * Math.cos((angleCenter / 180) * Math.PI);
+  let yMassPosition1 = r * Math.sin((angleCenter / 180) * Math.PI);
 
-  let xMassPosition2 = r * Math.cos((angleCenter + 120) / 180 * Math.PI);
-  let yMassPosition2 = r * Math.sin((angleCenter + 120) / 180 * Math.PI);
+  let xMassPosition2 = r * Math.cos(((angleCenter + 120) / 180) * Math.PI);
+  let yMassPosition2 = r * Math.sin(((angleCenter + 120) / 180) * Math.PI);
 
-  let xMassPosition3 = r * Math.cos((angleCenter + 240) / 180 * Math.PI);
-  let yMassPosition3 = r * Math.sin((angleCenter + 240) / 180 * Math.PI);
+  let xMassPosition3 = r * Math.cos(((angleCenter + 240) / 180) * Math.PI);
+  let yMassPosition3 = r * Math.sin(((angleCenter + 240) / 180) * Math.PI);
   // debug('step2');
 
   // console.log(xMassPosition1, yMassPosition1, xMassPosition2, yMassPosition2, xMassPosition3);
 
-  let angle1 = setServoAngle(180 - formula(xMassPosition1, yMassPosition1, bigRadius, radiusServo, distance), infoServo1);
-  let angle2 = setServoAngle(180 - formula(xMassPosition2, yMassPosition2, bigRadius, radiusServo, distance), infoServo2);
-  let angle3 = setServoAngle(180 - formula(xMassPosition3, yMassPosition3, bigRadius, radiusServo, distance), infoServo3);
+  let angle1 = setServoAngle(
+    180 -
+      formula(xMassPosition1, yMassPosition1, bigRadius, radiusServo, distance),
+    infoServo1
+  );
+  let angle2 = setServoAngle(
+    180 -
+      formula(xMassPosition2, yMassPosition2, bigRadius, radiusServo, distance),
+    infoServo2
+  );
+  let angle3 = setServoAngle(
+    180 -
+      formula(xMassPosition3, yMassPosition3, bigRadius, radiusServo, distance),
+    infoServo3
+  );
   // debug('step3');
 
   debug(`${angleCenter}\t${angle1}\t${angle2}\t${angle3}`);

@@ -10,7 +10,7 @@ const getTimeDiff = require('./getTimeDiff');
  * Computes the angular speed from angles and times
  * @param {object} angles in degrees
  * @param {object} times in the hrtime format
- * @returns {number} angular speed in degrees/second
+ * @returns {number} angular speed in [degrees/s]
  */
 function getSpeed(angles, times) {
   let angleDiff = angles.current - angles.previous;

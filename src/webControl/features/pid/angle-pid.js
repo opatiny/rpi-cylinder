@@ -15,19 +15,23 @@ const Controller = require('./pid-lib');
 let controller = new Controller({
   kP: 0.25,
   kI: 0.005,
-  kD: 0.40
+  kD: 0.4
 });
 
 /**
- * PID algorithm returning radiusCenter for a given target angle
+ * PID algorithm returning radiusCenter for a given target angle.
+ * radiusCenter is limited by maxRadius (src/prefs/).
  * @param {object} status pid property is used
- * @returns {number} radiusCenter in mm
+ * @returns {number} radiusCenter in [mm]
  */
 function anglePID(status) {
   let radiusCenter;
 
   // hack to make the PID work
-  if (isNaN(status.pid.currentAngle) | Math.abs(status.pid.currentAngle) === Infinity) {
+  if (
+    isNaN(status.pid.currentAngle) |
+    (Math.abs(status.pid.currentAngle) === Infinity)
+  ) {
     status.pid.currentAngle = 0;
   }
 

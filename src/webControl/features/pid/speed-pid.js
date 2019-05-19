@@ -17,14 +17,14 @@ const Controller = require('./pid-lib');
 let controller = new Controller({
   kP: 0.05,
   kI: 0.2,
-  kD: 0.05,
+  kD: 0.05
   // dt: 0.1 // in seconds
 });
 
 /**
- * PID algorithm returning radiusCenter for a given target angular speed
- * @param {object} status
- * @returns {number} radiusCenter in mm
+ * PID algorithm returning radiusCenter for a given target angular speed in [degree/s].
+ * @param {object} status pid property is used
+ * @returns {number} radiusCenter in [mm]
  */
 function stable(status) {
   let radiusCenter;
@@ -37,7 +37,10 @@ function stable(status) {
   debug(`currentSpeed\t${status.pid.currentSpeed}`);
 
   // hack to make the PID work
-  if (isNaN(status.pid.currentSpeed) | Math.abs(status.pid.currentSpeed) === Infinity) {
+  if (
+    isNaN(status.pid.currentSpeed) |
+    (Math.abs(status.pid.currentSpeed) === Infinity)
+  ) {
     status.pid.currentSpeed = 0;
   }
 

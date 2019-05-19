@@ -6,7 +6,13 @@
 const debug = require('debug')('wc:gyroToProtoAngle'); // wc for web control
 
 /**
- * Returns the angle for the mass that would define a perpendicular with the ground (for cp3) based on the inclination information
+ * Function linking the inclination returned by
+ * the accelerometer to the angle that should be written
+ * as a mass position so that the mass would be at the lower possible point (baseAngle).
+ * This means the segment center-mass would be perpendicular
+ * to the ground.
+ * Also, this function is only accurate for cp3 and the specific position of
+ * the accelerometer on that prototype.
  * @param {number} inclination in degrees
  * @returns baseAngle in degrees
  */
@@ -23,16 +29,44 @@ function toPrototypeInclination(inclination) {
   // code that allows to assign the angleCenter of the balanced position of the cylinder, for any value of the accelerometer.
   // These assignations are based on cylinderPrototype3 and the particular position of the gyro on that prototype
 
-  var angleConvertor = { codeAngle0: 1, codeAngle90: 91, codeangle180: 181, codeAngle270: 271 };
+  var angleConvertor = {
+    codeAngle0: 1,
+    codeAngle90: 91,
+    codeangle180: 181,
+    codeAngle270: 271
+  };
 
   if (angleConvertor.codeAngle0 <= inclination < angleConvertor.codeAngle90) {
-    baseAngle = (inclination - angleConvertor.codeAngle0) * 90 / (angleConvertor.codeAngle90 - angleConvertor.codeAngle0);
-  } else if (angleConvertor.codeAngle90 <= inclination < angleConvertor.codeAngle180) {
-    baseAngle = (inclination - angleConvertor.codeAngle90) * 90 / (angleConvertor.codeAngle180 - angleConvertor.codeAngle90) + 90;
-  } else if (angleConvertor.codeAngle180 <= inclination < angleConvertor.codeAngle270) {
-    baseAngle = (inclination - angleConvertor.codeAngle180) * 90 / (angleConvertor.codeAngle270 - angleConvertor.codeAngle180) + 180;
-  } else if (angleConvertor.codeAngle270 <= inclination < angleConvertor.codeAngle0) {
-    baseAngle = (inclination - angleConvertor.codeAngle270) * 90 / (angleConvertor.codeAngle0 - angleConvertor.codeAngle270) + 270;
+    baseAngle =
+      ((inclination - angleConvertor.codeAngle0) * 90) /
+      (angleConvertor.codeAngle90 - angleConvertor.codeAngle0);
+  } else if (
+    angleConvertor.codeAngle90 <=
+    inclination <
+    angleConvertor.codeAngle180
+  ) {
+    baseAngle =
+      ((inclination - angleConvertor.codeAngle90) * 90) /
+        (angleConvertor.codeAngle180 - angleConvertor.codeAngle90) +
+      90;
+  } else if (
+    angleConvertor.codeAngle180 <=
+    inclination <
+    angleConvertor.codeAngle270
+  ) {
+    baseAngle =
+      ((inclination - angleConvertor.codeAngle180) * 90) /
+        (angleConvertor.codeAngle270 - angleConvertor.codeAngle180) +
+      180;
+  } else if (
+    angleConvertor.codeAngle270 <=
+    inclination <
+    angleConvertor.codeAngle0
+  ) {
+    baseAngle =
+      ((inclination - angleConvertor.codeAngle270) * 90) /
+        (angleConvertor.codeAngle0 - angleConvertor.codeAngle270) +
+      270;
   }
 
   debug(`baseAngle\t${baseAngle}`);
