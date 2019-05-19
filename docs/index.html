@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>chip 1.0.0 | Documentation</title>
+  <title>rpi-cylinder 2.0.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
   <link href='assets/style.css' rel='stylesheet' />
@@ -13,8 +13,8 @@
     <div class='flex'>
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'>chip</h3>
-          <div class='mb1'><code>1.0.0</code></div>
+          <h3 class='mb0 no-anchor'>rpi-cylinder</h3>
+          <div class='mb1'><code>2.0.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -95,26 +95,6 @@
               
                 
                 <li><a
-                  href='#controller'
-                  class="">
-                  Controller
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#stable'
-                  class="">
-                  stable
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#stable'
                   class="">
                   stable
@@ -155,6 +135,16 @@
               
                 
                 <li><a
+                  href='#basicstab'
+                  class="">
+                  basicStab
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#toalpha'
                   class="">
                   toAlpha
@@ -187,7 +177,8 @@
   
 
   <p>Modifies status.absoluteAngle.current: absolute inclination of the cylinder
-in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
+in degrees. Instead of an "oscillating" value between -180 and 180 degrees,
+the value goes from -Infinity to Infinity.</p>
 
     <div class='pre p1 fill-light mt0'>updateAbsoluteAngle(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
   
@@ -268,7 +259,7 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>baseAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    in degrees
+	    in degrees (angle so the center-mass segment is perpendicular to the ground)
 
           </div>
           
@@ -327,7 +318,13 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>Returns the angle for the mass that would define a perpendicular with the ground (for cp3) based on the inclination information</p>
+  <p>Function linking the inclination returned by
+the accelerometer to the angle that should be written
+as a mass position so that the mass would be at the lower possible point (baseAngle).
+This means the segment center-mass would be perpendicular
+to the ground.
+Also, this function is only accurate for cp3 and the specific position of
+the accelerometer on that prototype.</p>
 
     <div class='pre p1 fill-light mt0'>toPrototypeInclination(inclination: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): any</div>
   
@@ -397,7 +394,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>PID algorithm returning radiusCenter for a given target angle</p>
+  <p>PID algorithm returning radiusCenter for a given target angle.
+radiusCenter is limited by maxRadius (src/prefs/).</p>
 
     <div class='pre p1 fill-light mt0'>anglePID(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
   
@@ -432,7 +430,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        radiusCenter in mm
+        radiusCenter in 
+[mm]
 
       
     
@@ -511,7 +510,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        angular speed in degrees/second
+        angular speed in 
+[degrees/s]
 
       
     
@@ -546,7 +546,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>Calculates the time difference in seconds between 2 hrtimes</p>
+  <p>Calculates the time difference in seconds between 2 hrtimes.
+hrtime is an array of two int.</p>
 
     <div class='pre p1 fill-light mt0'>getTimeDiff(hrtime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, previousHrtime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
   
@@ -643,7 +644,9 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>omega</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    
+	    rotation speed in 
+[degree/s]
+
           </div>
           
         </div>
@@ -651,7 +654,9 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    
+	    in 
+[mm]
+
           </div>
           
         </div>
@@ -665,161 +670,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        translation speed
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='controller'>
-      Controller
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>PID Controller. Based on the npm package: node-pid-controller</p>
-
-    <div class='pre p1 fill-light mt0'>new Controller(kP: any, kI: any, kD: any, dt: any)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>kP</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>kI</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>kD</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>dt</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='stable'>
-      stable
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>PID algorithm returning radiusCenter for a given target angular speed</p>
-
-    <div class='pre p1 fill-light mt0'>stable(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>status</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        radiusCenter in mm
+        translation speed in 
+[m/s]
 
       
     
@@ -854,7 +706,7 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>Stabilization function for the cylinder: doesn't work very well. The cylinder starts increasingly oscillating.</p>
+  <p>PID algorithm returning radiusCenter for a given target angular speed in [degree/s].</p>
 
     <div class='pre p1 fill-light mt0'>stable(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
   
@@ -874,7 +726,7 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>status</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    global object with all the properties
+	    pid property is used
 
           </div>
           
@@ -889,7 +741,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        angleCenter in degrees
+        radiusCenter in 
+[mm]
 
       
     
@@ -924,7 +777,8 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>Returns a new log based on current cylinder status. Log format is: { angleDiff: 0, end: 0, start: 0 }</p>
+  <p>Returns a new log based on current cylinder status. Log format is: { angleDiff: 0, end: 0, start: 0 }.
+Logs were used for a speed based PID.</p>
 
     <div class='pre p1 fill-light mt0'>generateLog(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
   
@@ -1064,7 +918,7 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
   </div>
   
 
-  <p>Returns a speed (in deg/s) smoothed on a defined time span (in ms).</p>
+  <p>Returns a speed (in deg/s) smoothed over a defined time span (in ms). Basically an average.</p>
 
     <div class='pre p1 fill-light mt0'>smoothSpeed(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
   
@@ -1099,9 +953,82 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        smoothSpeed : speed smoothed on a defined time span in 
+        smoothSpeed, speed smoothed on a defined time span in 
 [degrees/s]
 ,
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='basicstab'>
+      basicStab
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Basic stabilization function for the cylinder: doesn't work very well.
+The cylinder starts increasingly oscillating. The cylinder is supposed
+to stabilize around a specific angle (always the same).</p>
+
+    <div class='pre p1 fill-light mt0'>basicStab(status: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>status</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    global object with all the properties
+(uses inclination.current and inclination.previous)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        angleCenter in degrees
 
       
     
@@ -1156,7 +1083,7 @@ in degrees (instead of an "oscillating" value between -180 and 180 degrees).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>radiusCenter</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    in mm, limited by hardware max radius
+	    in mm, limited by hardware max radius (defined in src/prefs/)
 
           </div>
           
