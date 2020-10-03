@@ -5,6 +5,10 @@
 
 **Note:** To obtain general information about the project, click [here](https://opatiny.github.io/rc2/).
 
+## Cite this repository
+
+Océane Patiny, Miguel Angel Asencio Hurtado, & Luc Patiny. (2020, October 3). opatiny/rpi-cylinder: Remote controlled cylinder final JS code (Version v1.0.0). Zenodo. http://doi.org/10.5281/zenodo.4064765
+
 ## Abstract
 
 This repository contains the final code that allows the control of a robotic cylinder that rolls when its center of mass is displaced. To induce the movement, a mass is moved inside the cylinder using three high torque servo motors fixed on an equilateral triangle around the cylinder. The code is designed to work on a Raspberry Pi Nano W. This is an adaptation of the program, which was initially conceived to work on a C.H.I.P. Pro (click [here](https://github.com/opatiny/chip) to see the original code). The change had to be made, for C.H.I.P. got bankrupt and the code that we had at that time did not work properly anymore.
