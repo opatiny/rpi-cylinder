@@ -39,7 +39,7 @@
     "ws": "^3.2.0"
   },
   "devDependencies": {
-    "codecov": "^2.3.0",
+    "codecov": "^3.8.3",
     "documentation": "^11.0.0",
     "eslint": "^5.16.0",
     "eslint-config-cheminfo": "^1.20.1",
